@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1) Year in footer
+    // yearr in footer
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // 2) Open/Closed status
+    // open closed status
     const openBadge = document.getElementById('openStatus');
     let lastIsOpen = true;
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkOpenStatus();
     setInterval(() => checkOpenStatus(new Date()), 60 * 1000);
 
-    // 3) Menu filtering
+    //menu filtering
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     filterMenu('all');
 
-    // 4) Ingredients modal (translated)
+    //ingredients modal)
     const ingredientsModal = new bootstrap.Modal(document.getElementById('ingredientsModal'));
     document.querySelectorAll('.view-ingredient').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 6) Reservation form + localStorage
+    //reservation form and localStorage
     const reservationForm = document.getElementById('reservationForm');
     const resMsg = document.getElementById('resMsg');
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { resMsg.classList.add('visually-hidden'); }, 5000);
     });
 
-    // 7) Reserve buttons scroll to the form
+    // reserve buttons scroll to the form
     ['reserveBtnTop', 'heroReserve'].forEach(id => {
         const el = document.getElementById(id);
         el.addEventListener('click', () => {
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter') e.target.click(); });
     });
 
-    // 8) Next event time (translated)
+    // next event time
     const nextEventTime = document.getElementById('nextEventTime');
     function updateNextEvent() {
         const now = new Date();
@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateNextEvent();
 
-    // 9) Smooth scrolling for anchors
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
             const targetId = a.getAttribute('href').slice(1);
@@ -128,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('lightboxImg').focus();
     });
 
-    // 10) Re-render dynamic texts when the language changes
+    // re render dynamic texts when the language changes
     document.addEventListener('langchange', () => {
         renderOpenStatus();
         updateNextEvent();

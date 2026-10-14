@@ -1,7 +1,3 @@
-// Menu items and prices (must match the prices on index.html)
-// key      = internal id
-// mk / en  = names shown/typed by the admin
-// aliases  = extra spellings that are accepted when typing
 const MENU = [
     { key: 'margarita',    mk: 'Маргарита',       en: 'Margarita',       price: 350, aliases: ['margarite', 'margherita'] },
     { key: 'oldfashioned', mk: 'Old Fashioned',   en: 'Old Fashioned',   price: 420 },

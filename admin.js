@@ -1,6 +1,6 @@
-const ADMIN_PASS = 'admin';   // any name is accepted as username, the password must be this
+const ADMIN_PASS = 'admin';   // PASSWORD MUST BE ADMIN!
 
-// already logged in? go straight to the tables
+// if already loged in go to tables
 if (sessionStorage.getItem('admin_auth') === '1') {
     location.replace('tables.html');
 }
@@ -30,6 +30,6 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
     }
 
     sessionStorage.setItem('admin_auth', '1');
-    sessionStorage.setItem('admin_user', name);   // shown as "Waiter: name" on the tables
+    sessionStorage.setItem('admin_user', name);
     location.href = 'tables.html';
 });

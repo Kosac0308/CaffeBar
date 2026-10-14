@@ -14,7 +14,6 @@ const Cookies = {
     }
 };
 
-// Consent value: 'all' | 'necessary' | null (not decided yet)
 const Consent = {
     KEY: 'cookie_consent',
     get() { return Cookies.get(this.KEY); },

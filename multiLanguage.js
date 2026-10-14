@@ -5,7 +5,7 @@ const LOCALES = { mk: 'mk-MK', en: 'en-GB' };
 const translations = {
     mk: {
         'nav.home': 'Почетна', 'nav.about': 'За нас', 'nav.menu': 'Мени', 'nav.gallery': 'Галерија',
-        'nav.events': 'Настани', 'nav.reservation': 'Резервација', 'nav.reserve': 'Резервирај',
+        'nav.events': 'Настани', 'nav.reservation': 'Резервација', 'nav.reserve': 'Резервирај', 'nav.login': 'Најава',
         'status.open': 'Отворено', 'status.closed': 'Затворено',
 
         'hero.title': 'Добредојдовте во Night Owl Bar',
@@ -63,7 +63,7 @@ const translations = {
 
     en: {
         'nav.home': 'Home', 'nav.about': 'About', 'nav.menu': 'Menu', 'nav.gallery': 'Gallery',
-        'nav.events': 'Events', 'nav.reservation': 'Reservation', 'nav.reserve': 'Book now',
+        'nav.events': 'Events', 'nav.reservation': 'Reservation', 'nav.reserve': 'Book now', 'nav.login': 'Login',
         'status.open': 'Open', 'status.closed': 'Closed',
 
         'hero.title': 'Welcome to Night Owl Bar',
@@ -120,7 +120,7 @@ const translations = {
     }
 };
 
-// Read saved language (cookie exists only if the user accepted cookies earlier)
+// Read saved language
 let currentLang = Cookies.get(LANG_KEY);
 if (!SUPPORTED.includes(currentLang)) currentLang = 'mk';
 
@@ -137,7 +137,7 @@ function applyTranslations() {
     document.querySelectorAll('.lang-option').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === currentLang);
     });
-    // let script.js refresh dynamic texts (open/closed badge, next event, ...)
+
     document.dispatchEvent(new CustomEvent('langchange', { detail: currentLang }));
 }
 
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTranslations();
 });
 
-// React to cookie choice: save language if accepted, delete it if declined
+// save language if accepted else delete it if declined
 document.addEventListener('consentchange', () => {
     if (Consent.allowsPreferences()) Cookies.set(LANG_KEY, currentLang, 365);
     else Cookies.remove(LANG_KEY);

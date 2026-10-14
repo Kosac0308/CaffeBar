@@ -1,4 +1,4 @@
-// Needs menu-data.js (MENU). Show a clear message if it was not loaded.
+// needs menu-data.js show a clear message if it was not loaded
 if (typeof MENU === 'undefined') {
     document.getElementById('tablesGrid').innerHTML =
         '<div class="alert alert-danger" style="grid-column:1/-1">menu-data.js was not loaded. Check that it is in the same folder as tables.html.</div>';
@@ -6,15 +6,14 @@ if (typeof MENU === 'undefined') {
 }
 
 const STORAGE_KEY = 'nightowl_tables';
-const TABLE_COUNT = 9;       // shown as a 3 x 3 grid of equal squares
-const ITEM_LANG = 'mk';      // language of item names shown in the list ('mk' or 'en')
+const TABLE_COUNT = 9;
+const ITEM_LANG = 'mk';
 const CURRENCY = 'ден';
 
 // name typed on the login page
 const currentWaiter = sessionStorage.getItem('admin_user') || 'Waiter';
 
 // ---------- helpers ----------
-// lower-case, remove accents, spaces, dashes... so "coca-cola" == "Coca Cola"
 const norm = s => s.toLowerCase().normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^\p{L}\p{N}]/gu, '');
@@ -26,16 +25,16 @@ function searchTerms(item) {
     return [item.key, item.mk, item.en, ...(item.aliases || [])].map(norm);
 }
 
-// returns { item } or { error }
+// return item or error
 function findItem(text) {
     const q = norm(text);
     if (!q) return { error: 'Type an item first.' };
 
-    // 1) exact match on any name / alias
+    //  exact match on any name or alias
     const exact = MENU.find(it => searchTerms(it).includes(q));
     if (exact) return { item: exact };
 
-    // 2) partial match ("marg" -> Margarita)
+    // partial match
     const partial = MENU.filter(it => q.length >= 2 && searchTerms(it).some(term => term.startsWith(q) || term.includes(q)));
     if (partial.length === 1) return { item: partial[0] };
     if (partial.length > 1) return { error: `More than one match: ${partial.map(itemName).join(', ')}` };
@@ -75,7 +74,7 @@ const isOccupied = t => Object.keys(t.items).length > 0;
 const getTotal = t => Object.entries(t.items)
     .reduce((sum, [key, qty]) => sum + (MENU_BY_KEY[key]?.price || 0) * qty, 0);
 
-// bill + tip is what the customer has to pay; change = received - bill - tip
+// change = received - bill - tip
 function calcPayment(t) {
     const total = getTotal(t);
     const tip = t.tip || 0;
@@ -88,7 +87,7 @@ function resetTable(t) {
     Object.assign(t, emptyTable(t.id));
 }
 
-// ---------- elements ----------
+
 const grid = document.getElementById('tablesGrid');
 const modalEl = document.getElementById('tableModal');
 const modal = new bootstrap.Modal(modalEl);
@@ -108,13 +107,13 @@ const dueLine = document.getElementById('dueLine');
 const payBtn = document.getElementById('payBtn');
 const closeTableBtn = document.getElementById('closeTableBtn');
 
-// suggestions for the input (both languages)
+// input in bith languages
 document.getElementById('menuList').innerHTML = MENU
     .flatMap(it => (it.mk === it.en ? [it.mk] : [it.mk, it.en]))
     .map(name => `<option value="${name}"></option>`)
     .join('');
 
-// ---------- render: tables ----------
+//tables
 function renderGrid() {
     grid.innerHTML = '';
     tables.forEach(t => {
@@ -136,7 +135,7 @@ function renderGrid() {
     });
 }
 
-// ---------- render: payment box (does not touch the input values) ----------
+// payments box
 function renderPayment(t) {
     const occupied = isOccupied(t);
     const { total, tip, due, change } = calcPayment(t);
@@ -163,7 +162,7 @@ function renderPayment(t) {
     payBtn.disabled = occupied && change !== null && change < 0;
 }
 
-// ---------- render: modal ----------
+// modal
 function renderModal() {
     const t = getTable(activeId);
     const occupied = isOccupied(t);
@@ -201,7 +200,7 @@ function renderModal() {
     tipInput.value = t.tip ? t.tip : '';
     renderPayment(t);
 
-    // buttons: pay first, then close
+    // buttons
     payBtn.classList.toggle('d-none', !(occupied && !t.paid));
     closeTableBtn.classList.toggle('d-none', !(occupied && t.paid));
 }
@@ -249,7 +248,7 @@ addForm.addEventListener('submit', (e) => {
     itemInput.focus();
 });
 
-// minus one / remove line
+// minus one, remove line
 orderList.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;
@@ -262,11 +261,11 @@ orderList.addEventListener('click', (e) => {
     } else {
         delete t.items[key];
     }
-    if (!isOccupied(t)) resetTable(t);   // no items left -> table is free again
+    if (!isOccupied(t)) resetTable(t);   // if no items left table is free
     refresh();
 });
 
-// money received + tip -> change is recalculated while typing
+// money received + tip
 receivedInput.addEventListener('input', () => {
     const t = getTable(activeId);
     const v = receivedInput.value.trim();
@@ -290,7 +289,7 @@ payBtn.addEventListener('click', () => {
     refresh();
 });
 
-// close table -> becomes green, everything deleted (items, price, waiter, money, tip)
+// close table
 closeTableBtn.addEventListener('click', () => {
     resetTable(getTable(activeId));
     refresh();
